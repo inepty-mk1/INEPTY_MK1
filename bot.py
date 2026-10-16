@@ -5,32 +5,36 @@ import discord
 from discord.ext import commands
 import google.generativeai as genai
 
-# Mini servidor Flask para engañar el escaneo de puertos de Render
+# Mini servidor Flask para mantener vivo Render
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "INEPTY MK1 en línea y operando."
+    return "INEPTY MK1 vivísimo."
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
-# Inicia Flask en un hilo secundario
 threading.Thread(target=run_flask, daemon=True).start()
 
-# Configuración de las claves desde las variables de entorno de Render
+# Variables de entorno
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-# Configurar Gemini con el modelo 'gemini-pro'
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel(
-    model_name="gemini-pro",
-    system_instruction="Sos INEPTY MK1, la IA oficial de La República de los Ineptos. Sos re inepto pero amigo, hablás con humor argentino, usás modismos y te re prendés al boludeo del servidor."
+
+# Nombre del modelo estándar para la API actual
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# Prompt del sistema enviado directamente en la consulta
+SYSTEM_PROMPT = (
+    "Sos INEPTY MK1, la IA oficial de La República de los Ineptos. "
+    "Sos re inepto pero amigo, hablás con humor argentino, usás modismos "
+    "y te re prendés al boludeo del servidor.\n\n"
+    "Mensaje del usuario: "
 )
 
-# Configurar Discord Bot
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -46,12 +50,14 @@ async def on_message(message):
 
     if bot.user.mentioned_in(message) or (message.reference and message.reference.resolved.author == bot.user):
         async with message.channel.typing():
-            prompt = message.content.replace(f'<@{bot.user.id}>', '').strip()
-            if not prompt:
-                prompt = "Hola"
+            prompt_texto = message.content.replace(f'<@{bot.user.id}>', '').strip()
+            if not prompt_texto:
+                prompt_texto = "Hola"
             
             try:
-                response = model.generate_content(prompt)
+                # Concatenamos el rol para evitar incompatibilidades con system_instruction
+                full_prompt = f"{SYSTEM_PROMPT}{prompt_texto}"
+                response = model.generate_content(full_prompt)
                 await message.reply(response.text)
             except Exception as e:
                 await message.reply(f"Se me chispoteó el circuito ya que... {e}")
