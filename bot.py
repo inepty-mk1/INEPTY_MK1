@@ -3,8 +3,8 @@ from discord.ext import commands
 import google.generativeai as genai
 
 # Configuración de las claves
-DISCORD_TOKEN = MTU2MDQzNTAwNzQ2ODczNjU1Mg.Gg10Q6.60OUnn2Hm0j8uPajQLVLtuy7Sa86OrUryXtvS8
-GEMINI_API_KEY = AQ.Ab8RN6Kisd49NyT4YmxxxkvfwU_A_z7-UI0Vv_Mn38p9CEPyGQ
+DISCORD_TOKEN = "MTU2MDQzNTAwNzQ2ODczNjU1Mg.GSlv23.GDqWHrq8IU1J0CvPPRI-U7oLlyjjD90WryKfqI"
+GEMINI_API_KEY = "AQ.Ab8RN6Kisd49NyT4YmxxxkvfwU_A_z7-UI0Vv_Mn38p9CEPyGQ"
 
 # Configurar Gemini
 genai.configure(api_key=GEMINI_API_KEY)
