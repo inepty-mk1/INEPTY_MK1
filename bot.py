@@ -1,10 +1,11 @@
+import os
 import discord
 from discord.ext import commands
 import google.generativeai as genai
 
-# Configuración de las claves
-DISCORD_TOKEN = "MTU2MDQzNTAwNzQ2ODczNjU1Mg.GSlv23.GDqWHrq8IU1J0CvPPRI-U7oLlyjjD90WryKfqI"
-GEMINI_API_KEY = "AQ.Ab8RN6Kisd49NyT4YmxxxkvfwU_A_z7-UI0Vv_Mn38p9CEPyGQ"
+# Configuración de las claves desde las variables de entorno de Render
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 # Configurar Gemini
 genai.configure(api_key=GEMINI_API_KEY)
