@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 import google.generativeai as genai
 
-# Mini servidor Flask para engañar a Render
+# Mini servidor Flask para engañar el escaneo de puertos de Render
 app = Flask(__name__)
 
 @app.route('/')
@@ -24,18 +24,8 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Buscar automáticamente un modelo válido disponible para la API Key
-selected_model_name = "gemini-1.5-flash"
-try:
-    for m in genai.list_models():
-        if 'generateContent' in m.supported_generation_methods:
-            selected_model_name = m.name
-            print(f"Modelo detectado e iniciado: {selected_model_name}")
-            break
-except Exception as err:
-    print(f"Error listando modelos: {err}")
-
-model = genai.GenerativeModel(selected_model_name)
+# Fijamos el modelo soportado por la API key limpia
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 SYSTEM_PROMPT = (
     "Sos INEPTY MK1, la IA oficial de La República de los Ineptos. "
