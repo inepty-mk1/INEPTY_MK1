@@ -24,8 +24,8 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Fijamos el modelo soportado por la API key limpia
-model = genai.GenerativeModel("gemini-2.5-flash")
+# Fijamos el modelo gemini-3.8-flash requerido por Google
+model = genai.GenerativeModel("gemini-3.8-flash")
 
 SYSTEM_PROMPT = (
     "Sos INEPTY MK1, la IA oficial de La República de los Ineptos. "
