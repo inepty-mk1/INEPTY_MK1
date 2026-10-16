@@ -1,7 +1,23 @@
 import os
+import threading
+from flask import Flask
 import discord
 from discord.ext import commands
 import google.generativeai as genai
+
+# Mini servidor Flask para engañar el escaneo de puertos de Render
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "INEPTY MK1 en línea y operando."
+
+def run_flask():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+
+# Inicia Flask en un hilo secundario
+threading.Thread(target=run_flask, daemon=True).start()
 
 # Configuración de las claves desde las variables de entorno de Render
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
@@ -28,7 +44,6 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    # Responder si lo mencionan o le responden un mensaje
     if bot.user.mentioned_in(message) or (message.reference and message.reference.resolved.author == bot.user):
         async with message.channel.typing():
             prompt = message.content.replace(f'<@{bot.user.id}>', '').strip()
