@@ -23,10 +23,10 @@ threading.Thread(target=run_flask, daemon=True).start()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-# Configurar Gemini
+# Configurar Gemini con el modelo 'gemini-pro'
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(
-    model_name="models/gemini-1.5-flash",
+    model_name="gemini-pro",
     system_instruction="Sos INEPTY MK1, la IA oficial de La República de los Ineptos. Sos re inepto pero amigo, hablás con humor argentino, usás modismos y te re prendés al boludeo del servidor."
 )
 
