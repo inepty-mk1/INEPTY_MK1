@@ -50,11 +50,11 @@ async def on_message(message):
             if not prompt:
                 prompt = "Hola"
             
-            try:
+          try:
                 response = model.generate_content(prompt)
                 await message.reply(response.text)
             except Exception as e:
-                await message.reply("Se me chispoteó el circuito, probá de nuevo.")
+                await message.reply(f"Se me chispoteó el circuito ya que... {e}")
 
     await bot.process_commands(message)
 
