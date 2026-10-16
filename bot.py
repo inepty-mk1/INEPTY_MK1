@@ -26,7 +26,7 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 # Configurar Gemini
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="models/gemini-1.5-flash",
     system_instruction="Sos INEPTY MK1, la IA oficial de La República de los Ineptos. Sos re inepto pero amigo, hablás con humor argentino, usás modismos y te re prendés al boludeo del servidor."
 )
 
