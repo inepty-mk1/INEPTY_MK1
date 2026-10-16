@@ -5,12 +5,12 @@ import discord
 from discord.ext import commands
 import google.generativeai as genai
 
-# Mini servidor Flask para mantener vivo Render
+# Mini servidor Flask para engañar a Render
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "INEPTY MK1 vivísimo."
+    return "INEPTY MK1 en línea."
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
@@ -24,10 +24,19 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Nombre del modelo estándar para la API actual
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Buscar automáticamente un modelo válido disponible para la API Key
+selected_model_name = "gemini-1.5-flash"
+try:
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            selected_model_name = m.name
+            print(f"Modelo detectado e iniciado: {selected_model_name}")
+            break
+except Exception as err:
+    print(f"Error listando modelos: {err}")
 
-# Prompt del sistema enviado directamente en la consulta
+model = genai.GenerativeModel(selected_model_name)
+
 SYSTEM_PROMPT = (
     "Sos INEPTY MK1, la IA oficial de La República de los Ineptos. "
     "Sos re inepto pero amigo, hablás con humor argentino, usás modismos "
@@ -55,7 +64,6 @@ async def on_message(message):
                 prompt_texto = "Hola"
             
             try:
-                # Concatenamos el rol para evitar incompatibilidades con system_instruction
                 full_prompt = f"{SYSTEM_PROMPT}{prompt_texto}"
                 response = model.generate_content(full_prompt)
                 await message.reply(response.text)
